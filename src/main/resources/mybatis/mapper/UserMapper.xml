@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuan.shirodemo.dao.UserMapper">
+    <select id="get" resultType="com.chuan.shirodemo.domain.UserDO">
+        SELECT su_id id,username,password FROM s_user WHERE su_id=#{id}
+    </select>
+
+    <select id="list" resultType="com.chuan.shirodemo.domain.UserDO" parameterType="java.util.Map">
+        SELECT su_id id,username,password FROM s_user
+        <where>
+            <if test="id !=null and id !=''">su_id=#{id}</if>
+            <if test="username !=null and username !=''">username=#{username}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by su_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+</mapper>
